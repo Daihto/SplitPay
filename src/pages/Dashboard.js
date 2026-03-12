@@ -1,18 +1,50 @@
 import React from "react";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const navigate = useNavigate();
+
   return (
     <div className="dashboard-layout">
       <aside className="sidebar">
         <div className="sidebar-logo">SplitPay</div>
 
         <nav className="sidebar-menu">
-          <button className="sidebar-item active">Dashboard</button>
-          <button className="sidebar-item">My Groups</button>
-          <button className="sidebar-item">Expenses</button>
-          <button className="sidebar-item">Activity</button>
-          <button className="sidebar-item">Profile</button>
+          <button
+            className="sidebar-item active"
+            onClick={() => navigate("/dashboard")}
+          >
+            Dashboard
+          </button>
+
+          <button
+            className="sidebar-item"
+            onClick={() => navigate("/groups")}
+          >
+            My Groups
+          </button>
+
+          <button
+            className="sidebar-item"
+            onClick={() => navigate("/expenses")}
+          >
+            Expenses
+          </button>
+
+          <button
+            className="sidebar-item"
+            onClick={() => navigate("/activity")}
+          >
+            Activity
+          </button>
+
+          <button
+            className="sidebar-item"
+            onClick={() => navigate("/profile")}
+          >
+            Profile
+          </button>
         </nav>
       </aside>
 
@@ -24,8 +56,13 @@ function Dashboard() {
           </div>
 
           <div className="topbar-actions">
-            <button className="ghost-btn">+ New Group</button>
-            <button className="solid-btn">+ Add Expense</button>
+            <button className="ghost-btn" onClick={() => navigate("/groups")}>
+              + New Group
+            </button>
+
+            <button className="solid-btn" onClick={() => navigate("/expenses")}>
+              + Add Expense
+            </button>
           </div>
         </header>
 
@@ -53,7 +90,12 @@ function Dashboard() {
           <div className="panel panel-wide">
             <div className="panel-top">
               <h3>Recent Expenses</h3>
-              <button className="mini-btn">View All</button>
+              <button
+                className="mini-btn"
+                onClick={() => navigate("/expenses")}
+              >
+                View All
+              </button>
             </div>
 
             <div className="expense-header">
@@ -95,17 +137,22 @@ function Dashboard() {
             </div>
 
             <div className="quick-grid">
-              <button>Create Group</button>
-              <button>Add Expense</button>
-              <button>Settle Balance</button>
-              <button>View Activity</button>
+              <button onClick={() => navigate("/groups")}>Create Group</button>
+              <button onClick={() => navigate("/expenses")}>Add Expense</button>
+              <button onClick={() => navigate("/activity")}>Settle Balance</button>
+              <button onClick={() => navigate("/activity")}>View Activity</button>
             </div>
           </div>
 
           <div className="panel">
             <div className="panel-top">
               <h3>My Groups</h3>
-              <button className="mini-btn">Manage</button>
+              <button
+                className="mini-btn"
+                onClick={() => navigate("/groups")}
+              >
+                Manage
+              </button>
             </div>
 
             <div className="group-item">
