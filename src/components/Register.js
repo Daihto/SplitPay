@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Register.css";
 import { registerUser } from "../api/auth";
 import { useNavigate, Link } from "react-router-dom";
+import { SplitPayContext } from "../context/SplitPayContext";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -11,6 +12,7 @@ function Register() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
+  const { register } = useContext(SplitPayContext);
 
   const validateRegister = () => {
     if (!username.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
@@ -47,9 +49,10 @@ function Register() {
       return;
     }
 
-    const result = await registerUser(username.trim(), password);
+    const result = await registerUser(username.trim(), email.trim(), password);
 
     if (result === "Success") {
+      register(username.trim());
       navigate("/dashboard");
     } else {
       setErrorMessage(result || "Registration failed.");

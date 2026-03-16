@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Login.css";
 import { loginUser } from "../api/auth";
 import { useNavigate, Link } from "react-router-dom";
+import { SplitPayContext } from "../context/SplitPayContext";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(SplitPayContext);
 
   const validateLogin = () => {
     if (!username.trim() && !password.trim()) {
@@ -46,6 +48,7 @@ function Login() {
     const result = await loginUser(username.trim(), password);
 
     if (result === "Success") {
+      login(username.trim());
       navigate("/dashboard");
     } else {
       setErrorMessage(result || "Invalid username or password.");

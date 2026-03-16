@@ -1,30 +1,63 @@
 // src/api/auth.js
-export const loginUser = async (username, password) => {
+import { supabase } from "../supabaseClient";
+
+const normalizeEmail = (value) => {
+  const cleaned = value?.trim();
+  if (!cleaned) return "";
+  return cleaned.includes("@") ? cleaned : `${cleaned}@splitpay.local`;
+};
+
+export const loginUser = async (usernameOrEmail, password) => {
   try {
-    const response = await fetch('http://localhost:8080/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+    const email = normalizeEmail(usernameOrEmail);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     });
-    const text = await response.text(); // your backend returns "Success" or "Invalid username or password"
-    return text;
+
+    if (error) {
+      return error.message || "Invalid username or password";
+    }
+
+    return "Success";
   } catch (err) {
     console.error(err);
-    return 'Error connecting to server';
+    return "Error connecting to server";
   }
 };
 
-export const registerUser = async (username, password) => {
+export const registerUser = async (username, email, password) => {
   try {
-    const response = await fetch('http://localhost:8080/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+    const authEmail = normalizeEmail(email || username);
+
+    const { data, error } = await supabase.auth.signUp({
+      email: authEmail,
+      password,
     });
-    const text = await response.text(); // "Success" or "Username already exists"
-    return text;
+
+    if (error) {
+      return error.message || "Registration failed";
+    }
+
+    // Create profile
+    if (data.user) {
+      const { error: profileError } = await supabase.from("profiles").insert([
+        {
+          id: data.user.id,
+          username,
+          email: authEmail,
+        },
+      ]);
+
+      if (profileError) {
+        console.error("Failed to create profile", profileError);
+        // Maybe delete the user or handle
+      }
+    }
+
+    return "Success";
   } catch (err) {
     console.error(err);
-    return 'Error connecting to server';
+    return "Error connecting to server";
   }
 };
