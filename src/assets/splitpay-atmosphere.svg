@@ -1,0 +1,46 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8DB3FF" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#B999F0" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="panelA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E4EEFF" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#C9D8FA" stop-opacity="0.66"/>
+    </linearGradient>
+    <linearGradient id="panelB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D0E0FF" stop-opacity="0.86"/>
+      <stop offset="1" stop-color="#BCB8FA" stop-opacity="0.62"/>
+    </linearGradient>
+    <linearGradient id="lineA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7AB2FF" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#A89BFF" stop-opacity="0.82"/>
+    </linearGradient>
+    <linearGradient id="lineB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7EE2D5" stop-opacity="0.86"/>
+      <stop offset="1" stop-color="#76B9FF" stop-opacity="0.78"/>
+    </linearGradient>
+    <filter id="blurA" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <rect x="120" y="110" width="760" height="500" rx="36" fill="url(#panelA)"/>
+  <rect x="170" y="190" width="300" height="90" rx="16" fill="url(#panelB)"/>
+  <rect x="490" y="190" width="300" height="90" rx="16" fill="url(#panelB)"/>
+  <rect x="170" y="310" width="620" height="240" rx="22" fill="url(#panelB)" opacity="0.82"/>
+
+  <path d="M210 440 C290 380 380 500 460 445 C550 385 620 495 730 430" stroke="url(#lineA)" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M210 480 C300 420 390 560 500 495 C580 450 650 525 730 500" stroke="url(#lineB)" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.9"/>
+
+  <circle cx="515" cy="445" r="10" fill="#D6EAFF"/>
+  <circle cx="650" cy="495" r="9" fill="#E8D6FF"/>
+  <circle cx="290" cy="420" r="8" fill="#C6F0E7"/>
+
+  <rect x="64" y="246" width="170" height="230" rx="20" fill="url(#panelB)" opacity="0.88"/>
+  <rect x="910" y="120" width="210" height="500" rx="30" fill="url(#panelA)" opacity="0.78"/>
+
+  <circle cx="1020" cy="700" r="120" fill="url(#bgGlow)" filter="url(#blurA)"/>
+  <circle cx="210" cy="700" r="150" fill="url(#bgGlow)" filter="url(#blurA)" opacity="0.74"/>
+  <circle cx="900" cy="60" r="88" fill="url(#bgGlow)" filter="url(#blurA)" opacity="0.76"/>
+</svg>

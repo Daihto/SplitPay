@@ -1,0 +1,60 @@
+function buildBalanceKey(item) {
+  const fromId = String(item.fromUserId ?? item.fromName ?? "from");
+  const toId = String(item.toUserId ?? item.toName ?? "to");
+  const amount = Number(item.amount || 0).toFixed(2);
+  return `${fromId}->${toId}:${amount}`;
+}
+
+function getStorageKey(userId) {
+  return `splitpaySettledBalances:${userId}`;
+}
+
+function getSettledMap(userId) {
+  if (!userId) {
+    return {};
+  }
+
+  const raw = localStorage.getItem(getStorageKey(userId));
+  if (!raw) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+function saveSettledMap(userId, settledMap) {
+  if (!userId) {
+    return;
+  }
+
+  localStorage.setItem(getStorageKey(userId), JSON.stringify(settledMap));
+}
+
+function applySettledStatus(balances, userId) {
+  const settledMap = getSettledMap(userId);
+  return (Array.isArray(balances) ? balances : []).map((item) => {
+    const key = buildBalanceKey(item);
+    const isSettledByBackend = item.settled === true || item.status === "SETTLED";
+    const isSettledLocally = settledMap[key] === true;
+
+    return {
+      ...item,
+      _balanceKey: key,
+      settled: isSettledByBackend || isSettledLocally,
+      status: isSettledByBackend || isSettledLocally ? "SETTLED" : "UNPAID"
+    };
+  });
+}
+
+function markBalanceSettled(userId, balanceItem) {
+  const key = buildBalanceKey(balanceItem);
+  const settledMap = getSettledMap(userId);
+  settledMap[key] = true;
+  saveSettledMap(userId, settledMap);
+}
+
+export { applySettledStatus, buildBalanceKey, getSettledMap, markBalanceSettled };
