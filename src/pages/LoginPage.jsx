@@ -3,6 +3,22 @@ import { Link, useNavigate } from "react-router-dom";
 import splitpayAtmosphere from "../assets/splitpay-atmosphere.svg";
 import { getApiErrorMessage, loginUser } from "../api/apiService";
 
+function normalizeLoginResult(result, fallbackEmail) {
+  const nestedUser = result?.user || result?.data?.user || {};
+
+  const id = nestedUser.id ?? result?.id ?? result?.userId ?? result?.user_id ?? result?.uid;
+  const name = nestedUser.name ?? result?.name ?? result?.fullName ?? result?.full_name ?? "User";
+  const email = nestedUser.email ?? result?.email ?? fallbackEmail;
+  const token = result?.token ?? result?.accessToken ?? result?.access_token;
+
+  return {
+    id,
+    name,
+    email,
+    token
+  };
+}
+
 function LoginPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -21,15 +37,16 @@ function LoginPage() {
 
     try {
       const result = await loginUser(formData);
+      const normalizedUser = normalizeLoginResult(result, formData.email);
+
+      if (!normalizedUser.token) {
+        setError("Login succeeded but no auth token was returned. Please contact backend support.");
+        return;
+      }
 
       localStorage.setItem(
         "splitpayUser",
-        JSON.stringify({
-          id: result.user?.id ?? result.id,
-          name: result.user?.name ?? result.name ?? "User",
-          email: result.user?.email ?? result.email ?? formData.email,
-          token: result.token
-        })
+        JSON.stringify(normalizedUser)
       );
 
       navigate("/dashboard");
@@ -41,7 +58,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="auth-fullscreen auth-fullscreen--login">
+    <div className="auth-fullscreen auth-fullscreen--login auth-fullscreen--premium">
       <section className="auth-fullscreen__visual">
         <img
           className="auth-fullscreen__visual-art"
@@ -49,14 +66,17 @@ function LoginPage() {
           alt=""
           aria-hidden="true"
         />
+        <div className="auth-fullscreen__blob auth-fullscreen__blob--one" />
+        <div className="auth-fullscreen__blob auth-fullscreen__blob--two" />
+        <div className="auth-fullscreen__blob auth-fullscreen__blob--three" />
         <div className="auth-fullscreen__visual-layer" />
         <div className="auth-fullscreen__visual-haze" />
         <div className="auth-fullscreen__visual-content">
           <p className="auth-fullscreen__eyebrow">SPLITPAY</p>
-          <h1>Split expenses without the stress.</h1>
+          <h1>Finance clarity for every shared payment.</h1>
           <p>
-            Manage shared bills, see balances clearly, and keep track of who
-            paid and who still owes.
+            Manage shared bills, settle faster, and track every split with the
+            confidence of a modern fintech dashboard.
           </p>
 
           <div className="auth-fullscreen__badges">
@@ -90,28 +110,34 @@ function LoginPage() {
 
           <div className="auth-fullscreen__field">
             <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            <div className="auth-fullscreen__input-wrap">
+              <span className="auth-fullscreen__field-icon" aria-hidden="true">@</span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="auth-fullscreen__field">
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <div className="auth-fullscreen__input-wrap">
+              <span className="auth-fullscreen__field-icon" aria-hidden="true">#</span>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="auth-fullscreen__meta">

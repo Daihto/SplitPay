@@ -5,6 +5,14 @@ function buildBalanceKey(item) {
   return `${fromId}->${toId}:${amount}`;
 }
 
+function normalizeUserId(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value).trim();
+}
+
 function getStorageKey(userId) {
   return `splitpaySettledBalances:${userId}`;
 }
@@ -50,6 +58,44 @@ function applySettledStatus(balances, userId) {
   });
 }
 
+function getBalancePerspective(item, currentUserId) {
+  const currentId = normalizeUserId(currentUserId);
+  const fromId = normalizeUserId(item?.fromUserId ?? item?.fromUser?.id);
+  const toId = normalizeUserId(item?.toUserId ?? item?.toUser?.id);
+  const amount = Math.abs(Number(item?.amount || 0));
+
+  if (fromId && currentId && fromId === currentId) {
+    return {
+      type: "owe",
+      amount,
+      counterpartName: item?.toUserName || item?.toName || "User"
+    };
+  }
+
+  if (toId && currentId && toId === currentId) {
+    return {
+      type: "owed",
+      amount,
+      counterpartName: item?.fromUserName || item?.fromName || "User"
+    };
+  }
+
+  // Fallback for payloads that omit from/to ids and encode direction in amount sign.
+  if (Number(item?.amount || 0) < 0) {
+    return {
+      type: "owe",
+      amount,
+      counterpartName: item?.toUserName || item?.toName || "User"
+    };
+  }
+
+  return {
+    type: "owed",
+    amount,
+    counterpartName: item?.fromUserName || item?.fromName || "User"
+  };
+}
+
 function markBalanceSettled(userId, balanceItem) {
   const key = buildBalanceKey(balanceItem);
   const settledMap = getSettledMap(userId);
@@ -57,4 +103,4 @@ function markBalanceSettled(userId, balanceItem) {
   saveSettledMap(userId, settledMap);
 }
 
-export { applySettledStatus, buildBalanceKey, getSettledMap, markBalanceSettled };
+export { applySettledStatus, buildBalanceKey, getBalancePerspective, getSettledMap, markBalanceSettled };

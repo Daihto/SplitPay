@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import splitpayAtmosphere from "../assets/splitpay-atmosphere.svg";
 import { getApiErrorMessage, registerUser } from "../api/apiService";
 
 function RegisterPage() {
@@ -52,15 +53,25 @@ function RegisterPage() {
   }
 
   return (
-    <div className="auth-fullscreen auth-fullscreen--register">
+    <div className="auth-fullscreen auth-fullscreen--register auth-fullscreen--premium">
       <section className="auth-fullscreen__visual">
+        <img
+          className="auth-fullscreen__visual-art"
+          src={splitpayAtmosphere}
+          alt=""
+          aria-hidden="true"
+        />
+        <div className="auth-fullscreen__blob auth-fullscreen__blob--one" />
+        <div className="auth-fullscreen__blob auth-fullscreen__blob--two" />
+        <div className="auth-fullscreen__blob auth-fullscreen__blob--three" />
         <div className="auth-fullscreen__visual-layer" />
+        <div className="auth-fullscreen__visual-haze" />
         <div className="auth-fullscreen__visual-content">
           <p className="auth-fullscreen__eyebrow">CREATE ACCOUNT</p>
-          <h1>Start organizing shared payments the easy way.</h1>
+          <h1>Build your shared wallet with premium control.</h1>
           <p>
-            Create groups, add expenses, view balances, and make every split
-            easier to understand.
+            Create groups, automate split tracking, and stay in control of
+            who owes what with clean financial visibility.
           </p>
 
           <div className="auth-fullscreen__badges">
@@ -94,56 +105,68 @@ function RegisterPage() {
 
           <div className="auth-fullscreen__field">
             <label htmlFor="name">Name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Enter your full name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+            <div className="auth-fullscreen__input-wrap">
+              <span className="auth-fullscreen__field-icon" aria-hidden="true">U</span>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="auth-fullscreen__field">
             <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            <div className="auth-fullscreen__input-wrap">
+              <span className="auth-fullscreen__field-icon" aria-hidden="true">@</span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="auth-fullscreen__field">
             <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              minLength={6}
-              placeholder="Create a password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <div className="auth-fullscreen__input-wrap">
+              <span className="auth-fullscreen__field-icon" aria-hidden="true">#</span>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                minLength={6}
+                placeholder="Create a password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="auth-fullscreen__field">
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              minLength={6}
-              placeholder="Re-enter your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+            <div className="auth-fullscreen__input-wrap">
+              <span className="auth-fullscreen__field-icon" aria-hidden="true">#</span>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                minLength={6}
+                placeholder="Re-enter your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           <p

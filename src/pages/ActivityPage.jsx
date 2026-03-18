@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getGroupExpenses, getGroups } from "../api/apiService";
+import { getApiErrorMessage, getGroupExpenses, getGroups } from "../api/apiService";
 import { getActivityItems } from "../utils/activityUtils";
 
 function ActivityPage() {
@@ -12,10 +12,11 @@ function ActivityPage() {
     async function loadActivity() {
       try {
         setLoading(true);
+        setError("");
         const groups = await getGroups();
         const groupList = Array.isArray(groups) ? groups : [];
 
-        const expenseResults = await Promise.all(
+        const expenseResults = await Promise.allSettled(
           groupList.map(async (group) => {
             const expenses = await getGroupExpenses(group.id);
             return (Array.isArray(expenses) ? expenses : []).map((expense) => ({
@@ -28,6 +29,12 @@ function ActivityPage() {
           })
         );
 
+        const successfulExpenses = expenseResults
+          .filter((result) => result.status === "fulfilled")
+          .map((result) => result.value);
+
+        const failedExpenseRequests = expenseResults.filter((result) => result.status === "rejected").length;
+
         const paymentEvents = getActivityItems(currentUser?.id).map((event) => ({
           id: `payment-${event.id}`,
           type: "PAYMENT",
@@ -36,13 +43,17 @@ function ActivityPage() {
           createdAt: event.createdAt
         }));
 
-        const mergedItems = [...expenseResults.flat(), ...paymentEvents]
+        const mergedItems = [...successfulExpenses.flat(), ...paymentEvents]
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 25);
 
         setItems(mergedItems);
+
+        if (failedExpenseRequests > 0) {
+          setError("Some group activity is unavailable for this user right now.");
+        }
       } catch (apiError) {
-        setError(apiError.response?.data?.message ?? "Could not load activity.");
+        setError(getApiErrorMessage(apiError, "Could not load activity."));
       } finally {
         setLoading(false);
       }

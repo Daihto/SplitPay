@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getUserBalances } from "../api/apiService";
 import { addActivityItem } from "../utils/activityUtils";
-import { applySettledStatus, markBalanceSettled } from "../utils/settlementUtils";
+import { applySettledStatus, getBalancePerspective, markBalanceSettled } from "../utils/settlementUtils";
 
 function BalancesPage() {
   const currentUser = JSON.parse(localStorage.getItem("splitpayUser"));
@@ -38,17 +38,18 @@ function BalancesPage() {
           return acc;
         }
 
-        const amount = Number(row.amount || 0);
-        if (amount > 0) {
-          acc.receive += amount;
-        } else {
-          acc.pay += Math.abs(amount);
+        const balance = getBalancePerspective(row, currentUser?.id);
+        if (balance.type === "owed") {
+          acc.receive += balance.amount;
+        } else if (balance.type === "owe") {
+          acc.pay += balance.amount;
         }
+
         return acc;
       },
       { pay: 0, receive: 0 }
     );
-  }, [balances]);
+  }, [balances, currentUser?.id]);
 
   function handleMarkSettled(item) {
     if (!currentUser?.id) {
@@ -103,15 +104,18 @@ function BalancesPage() {
         {balances.length === 0 ? <p>No pending balances.</p> : null}
         <ul className="list list--dense">
           {balances.map((item, index) => {
-            const amount = Math.abs(Number(item.amount || 0));
+            const balance = getBalancePerspective(item, currentUser?.id);
+            const amount = balance.amount;
             const isSettled = item.settled === true || item.status === "SETTLED";
+            const heading =
+              balance.type === "owe"
+                ? `You owe ${balance.counterpartName}`
+                : `${balance.counterpartName} owes you`;
 
             return (
               <li key={`${item.id || index}-${amount}`} className="list__item">
                 <div>
-                  <strong>
-                    {item.fromUserName || item.fromName || "User"} owes {item.toUserName || item.toName || "User"}
-                  </strong>
+                  <strong>{heading}</strong>
                   <p className={`balance-status ${isSettled ? "settled" : "unpaid"}`}>
                     {isSettled ? "Settled" : "Unpaid"}
                   </p>
