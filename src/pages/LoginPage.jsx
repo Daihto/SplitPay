@@ -140,10 +140,6 @@ function LoginPage() {
             </div>
           </div>
 
-          <div className="auth-fullscreen__meta">
-            <span>Forgot password?</span>
-          </div>
-
           {error ? <p className="feedback feedback--error">{error}</p> : null}
 
           <button

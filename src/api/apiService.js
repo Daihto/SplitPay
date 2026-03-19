@@ -83,3 +83,21 @@ export async function updateUserProfile(userId, payload) {
   const response = await api.put(`/api/users/${userId}`, payload, { headers: getAuthHeaders() });
   return response.data;
 }
+
+export async function updateUserPassword(userId, payload) {
+  const response = await api.put(`/api/users/${userId}/password`, payload, {
+    headers: getAuthHeaders()
+  });
+  return response.data;
+}
+
+export async function uploadUserAvatar(userId, file) {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const response = await api.post(`/api/users/${userId}/avatar`, formData, {
+    headers: getAuthHeaders()
+  });
+
+  return response.data;
+}
