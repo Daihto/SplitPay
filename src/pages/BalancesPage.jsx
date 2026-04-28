@@ -88,20 +88,22 @@ function BalancesPage() {
       </section>
       {error ? <p className="feedback feedback--error">{error}</p> : null}
 
-      <div className="card-grid">
-        <section className="card summary-card">
+      <div className="balances-page-grid">
+        <section className="card summary-card balances-card balances-card--owe">
           <p className="summary-card__title">You Owe</p>
           <p className="summary-card__value">${totals.pay.toFixed(2)}</p>
         </section>
-        <section className="card summary-card">
+        <section className="card summary-card balances-card balances-card--receive">
           <p className="summary-card__title">You Should Receive</p>
           <p className="summary-card__value">${totals.receive.toFixed(2)}</p>
         </section>
       </div>
 
-      <section className="card">
-        <h2>Who Owes Whom</h2>
-        {balances.length === 0 ? <p>No pending balances.</p> : null}
+      <section className="card balances-card balances-card--list">
+        <div className="section-title-with-action">
+          <h2 className="balances-card__title">Who Owes Whom</h2>
+        </div>
+        {balances.length === 0 ? <p className="status-text">No pending balances.</p> : null}
         <ul className="list list--dense">
           {balances.map((item, index) => {
             const balance = getBalancePerspective(item, currentUser?.id);

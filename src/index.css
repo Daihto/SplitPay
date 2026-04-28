@@ -826,6 +826,7 @@ body,
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .app-shell--authed .activity-type {
@@ -899,6 +900,7 @@ body,
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.6rem;
+  margin-bottom: 1.25rem;
 }
 
 .app-shell--authed .profile-meta-card {
@@ -933,9 +935,9 @@ body,
 
 .app-shell--authed .profile-avatar-block {
   display: grid;
-  grid-template-columns: 112px 1fr;
+  grid-template-columns: minmax(112px, 112px) 1fr;
   gap: 1rem;
-  align-items: start;
+  align-items: center;
 }
 
 .app-shell--authed .profile-avatar-preview {
@@ -943,10 +945,193 @@ body,
   height: 112px;
   border-radius: 999px;
   overflow: hidden;
-  border: 2px solid #c8daf8;
-  background: linear-gradient(180deg, #f4f8ff 0%, #eaf2ff 100%);
+  border: 2px solid rgba(140, 152, 182, 0.65);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
   display: grid;
   place-items: center;
+}
+
+.app-shell--authed .profile-avatar-preview span {
+  color: #e8f0ff;
+}
+
+.app-shell--authed .profile-avatar-form {
+  max-width: 460px;
+}
+
+.app-shell--authed .profile-editor {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 1.4rem;
+  border: 1px solid rgba(97, 108, 133, 0.75);
+  background: linear-gradient(180deg, rgba(36, 42, 58, 0.96) 0%, rgba(22, 25, 34, 0.98) 100%);
+}
+
+.app-shell--authed .profile-editor .section-title-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.app-shell--authed .profile-editor h2 {
+  color: #f1f6ff;
+}
+
+.app-shell--authed .profile-editor .profile-meta-card {
+  min-height: 96px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(98, 108, 138, 0.72);
+}
+
+.app-shell--authed .profile-editor .profile-meta-label {
+  color: #a9b7d6;
+}
+
+.app-shell--authed .profile-editor .profile-meta-value {
+  color: #eef5ff;
+}
+
+.app-shell--authed .profile-editor label {
+  color: #d8e2ff;
+}
+
+.app-shell--authed .profile-editor .stack-form {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 520px;
+}
+
+.app-shell--authed .profile-editor input {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(96, 108, 133, 0.78);
+  color: #eef4ff;
+}
+
+.app-shell--authed .profile-editor input:focus {
+  border-color: rgba(170, 182, 246, 0.9);
+  box-shadow: 0 0 0 3px rgba(170, 182, 246, 0.18);
+}
+
+.app-shell--authed .profile-editor .feedback {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.app-shell--authed .profile-editor .feedback--error {
+  color: #f9c2d1;
+}
+
+.app-shell--authed .profile-editor .feedback--success {
+  color: #b7e6c7;
+}
+
+.app-shell--authed .profile-editor .quick-actions__buttons {
+  justify-content: flex-end;
+  margin-top: 0.15rem;
+}
+
+.app-shell--authed .profile-editor .button--secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #dbe4ff;
+  border-color: rgba(110, 120, 147, 0.8);
+}
+
+.app-shell--authed .profile-editor .button {
+  min-width: 140px;
+}
+
+.app-shell--authed .profile-editor .password-grid {
+  gap: 1rem;
+}
+
+.app-shell--authed .profile-page-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.app-shell--authed .profile-card {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 156, 178, 0.25);
+  background: rgba(20, 24, 36, 0.92);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+}
+
+.app-shell--authed .profile-card--photo,
+.app-shell--authed .profile-card--info,
+.app-shell--authed .profile-card--password {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 980px) {
+  .app-shell--authed .profile-card--info {
+    grid-column: span 7;
+  }
+
+  .app-shell--authed .profile-card--password {
+    grid-column: span 5;
+  }
+}
+
+.app-shell--authed .profile-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #eef4ff;
+}
+
+.app-shell--authed .profile-field label {
+  font-size: 0.82rem;
+  color: #98a8cf;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.app-shell--authed .profile-field input {
+  max-width: 520px;
+}
+
+.app-shell--authed .profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.45rem;
+}
+
+.app-shell--authed .profile-card .button {
+  min-width: 136px;
+}
+
+.app-shell--authed .profile-card .button--secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #dce4f5;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.app-shell--authed .profile-card .button {
+  background: linear-gradient(135deg, #d5c2fc 0%, #b09bf2 100%);
+  color: #1b1337;
+}
+
+.app-shell--authed .profile-card .button.button--secondary:hover,
+.app-shell--authed .profile-card .button.button--secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-shell--authed .profile-avatar-preview {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .app-shell--authed .profile-avatar-preview img {
@@ -962,11 +1147,6 @@ body,
   font-weight: 800;
 }
 
-.app-shell--authed .profile-avatar-form {
-  display: grid;
-  gap: 0.75rem;
-}
-
 .app-shell--authed .profile-avatar-form input[type="file"] {
   border: 1px solid #d4e1fa;
   border-radius: 12px;
@@ -978,6 +1158,7 @@ body,
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .app-shell--authed input:disabled {
@@ -2812,4 +2993,180 @@ body,
   .app-shell--authed .dashboard-concept__kpis {
     grid-template-columns: 1fr;
   }
+}
+
+/* ------------------------------
+   Groups Page Styles
+------------------------------ */
+
+.app-shell--authed .groups-page-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.app-shell--authed .groups-card {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 156, 178, 0.25);
+  background: rgba(20, 24, 36, 0.92);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+}
+
+.app-shell--authed .groups-card--create,
+.app-shell--authed .groups-card--list {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 980px) {
+  .app-shell--authed .groups-card--create {
+    grid-column: span 5;
+  }
+
+  .app-shell--authed .groups-card--list {
+    grid-column: span 7;
+  }
+}
+
+.app-shell--authed .groups-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #eef4ff;
+}
+
+.app-shell--authed .groups-field label {
+  font-size: 0.82rem;
+  color: #98a8cf;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.app-shell--authed .groups-field input {
+  max-width: 520px;
+}
+
+.app-shell--authed .groups-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.45rem;
+}
+
+.app-shell--authed .groups-card .button {
+  min-width: 136px;
+}
+
+.app-shell--authed .groups-card .button--secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #dce4f5;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.app-shell--authed .groups-card .button {
+  background: linear-gradient(135deg, #d5c2fc 0%, #b09bf2 100%);
+  color: #1b1337;
+}
+
+.app-shell--authed .groups-card .button.button--secondary:hover,
+.app-shell--authed .groups-card .button.button--secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ------------------------------
+   Expense Page Styles
+------------------------------ */
+
+.app-shell--authed .expense-card {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 156, 178, 0.25);
+  background: rgba(20, 24, 36, 0.92);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+}
+
+.app-shell--authed .expense-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #eef4ff;
+}
+
+.app-shell--authed .expense-field label {
+  font-size: 0.82rem;
+  color: #98a8cf;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.app-shell--authed .expense-field input,
+.app-shell--authed .expense-field select {
+  max-width: 520px;
+}
+
+.app-shell--authed .expense-participants legend {
+  font-size: 0.82rem;
+  color: #98a8cf;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.app-shell--authed .expense-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.45rem;
+}
+
+.app-shell--authed .expense-card .button {
+  min-width: 136px;
+  background: linear-gradient(135deg, #d5c2fc 0%, #b09bf2 100%);
+  color: #1b1337;
+}
+
+/* ------------------------------
+   Balances Page Styles
+------------------------------ */
+
+.app-shell--authed .balances-page-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.app-shell--authed .balances-card {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 156, 178, 0.25);
+  background: rgba(20, 24, 36, 0.92);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+}
+
+.app-shell--authed .balances-card--owe,
+.app-shell--authed .balances-card--receive {
+  grid-column: span 6;
+}
+
+.app-shell--authed .balances-card--list {
+  grid-column: 1 / -1;
+}
+
+.app-shell--authed .balances-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #eef4ff;
 }

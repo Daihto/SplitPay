@@ -111,53 +111,63 @@ function AddExpensePage() {
         <p className="hero-card__text">Record who paid and who shared the cost. SplitPay will handle the math.</p>
       </section>
 
-      <section className="card card--form">
-        <h2>Expense Details</h2>
-        <form className="stack-form" onSubmit={handleSubmit}>
-          <label htmlFor="description">Expense Description</label>
-          <input
-            id="description"
-            name="description"
-            type="text"
-            placeholder="Dinner"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
+      <section className="card card--form expense-card">
+        <div className="section-title-with-action">
+          <h2 className="expense-card__title">Expense Details</h2>
+        </div>
+        <form className="stack-form expense-form" onSubmit={handleSubmit}>
+          <div className="expense-field">
+            <label htmlFor="description">Expense Description</label>
+            <input
+              id="description"
+              name="description"
+              type="text"
+              placeholder="Dinner"
+              value={formData.description}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <label htmlFor="amount">Amount</label>
-          <input
-            id="amount"
-            name="amount"
-            type="number"
-            min="0"
-            step="0.01"
-            value={formData.amount}
-            onChange={handleChange}
-            required
-          />
+          <div className="expense-field">
+            <label htmlFor="amount">Amount</label>
+            <input
+              id="amount"
+              name="amount"
+              type="number"
+              min="0"
+              step="0.01"
+              value={formData.amount}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <label htmlFor="groupId">Group</label>
-          <select id="groupId" name="groupId" value={formData.groupId} onChange={handleChange} required>
-            <option value="">Select group</option>
-            {groups.map((group) => (
-              <option key={group.id} value={group.id}>
-                {group.name}
-              </option>
-            ))}
-          </select>
+          <div className="expense-field">
+            <label htmlFor="groupId">Group</label>
+            <select id="groupId" name="groupId" value={formData.groupId} onChange={handleChange} required>
+              <option value="">Select group</option>
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <label htmlFor="paidByUserId">Paid By</label>
-          <select id="paidByUserId" name="paidByUserId" value={formData.paidByUserId} onChange={handleChange} required>
-            <option value="">Select member</option>
-            {members.map((member) => (
-              <option key={member.id} value={member.id}>
-                {member.name || member.email}
-              </option>
-            ))}
-          </select>
+          <div className="expense-field">
+            <label htmlFor="paidByUserId">Paid By</label>
+            <select id="paidByUserId" name="paidByUserId" value={formData.paidByUserId} onChange={handleChange} required>
+              <option value="">Select member</option>
+              {members.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name || member.email}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <fieldset className="checkbox-group">
+          <fieldset className="checkbox-group expense-participants">
             <legend>Participants sharing the expense</legend>
             {members.map((member) => (
               <label key={member.id} className="checkbox-item">
@@ -173,9 +183,11 @@ function AddExpensePage() {
 
           {error ? <p className="feedback feedback--error">{error}</p> : null}
 
-          <button className="button" type="submit" disabled={loading}>
-            {loading ? "Saving..." : "Save Expense"}
-          </button>
+          <div className="expense-actions">
+            <button className="button" type="submit" disabled={loading}>
+              {loading ? "Saving..." : "Save Expense"}
+            </button>
+          </div>
         </form>
       </section>
     </div>

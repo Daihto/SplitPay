@@ -287,233 +287,235 @@ function ProfilePage() {
         </p>
       </section>
 
-      <section className="card card--form profile-editor">
-        <div className="section-title-with-action">
-          <h2>Account Information</h2>
-          {!editing ? (
-            <button
-              className="button button--secondary"
-              type="button"
-              onClick={() => {
-                setEditing(true);
-                setError("");
-                setSuccess("");
-              }}
-            >
-              Edit Profile
-            </button>
-          ) : null}
-        </div>
+      <div className="profile-page-grid">
+        <section className="card card--form profile-editor profile-card profile-card--photo">
+          <div className="section-title-with-action">
+            <h2 className="profile-card__title">Profile Photo</h2>
+          </div>
 
-        <form className="stack-form" onSubmit={handleSave}>
-          <div className="profile-meta-grid">
-            <div className="profile-meta-card">
-              <p className="profile-meta-label">User ID</p>
-              <p className="profile-meta-value">{currentUser?.id || "Not available"}</p>
+          <div className="profile-avatar-block">
+            <div className="profile-avatar-preview" aria-hidden="true">
+              {getAvatarUrl(currentUser) && !avatarLoadFailed ? (
+                <img
+                  src={getAvatarUrl(currentUser)}
+                  alt="Profile"
+                  onLoad={() => {
+                    logAvatarDebug("final img src", getAvatarUrl(currentUser));
+                  }}
+                  onError={(event) => {
+                    setAvatarLoadFailed(true);
+                    logAvatarDebug("image load failed for src", event.currentTarget.currentSrc || getAvatarUrl(currentUser));
+                  }}
+                />
+              ) : (
+                <span>{getNameInitial(currentUser?.name)}</span>
+              )}
             </div>
-            <div className="profile-meta-card">
-              <p className="profile-meta-label">Status</p>
-              <p className="profile-meta-value">{editing ? "Editing" : "Stable"}</p>
-            </div>
-          </div>
 
-          <div>
-            <label htmlFor="name">Name</label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleChange}
-              disabled={!editing || loading}
-              required
-            />
-          </div>
+            <form className="profile-avatar-form" onSubmit={handleAvatarUpload}>
+              <label htmlFor="avatarFile">Choose a photo</label>
+              <input
+                id="avatarFile"
+                name="avatarFile"
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarFileChange}
+                disabled={avatarLoading}
+              />
 
-          <div>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={!editing || loading}
-              required
-            />
-          </div>
+              {avatarError ? <p className="feedback feedback--error">{avatarError}</p> : null}
+              {avatarSuccess ? <p className="feedback feedback--success">{avatarSuccess}</p> : null}
 
-          {error ? <p className="feedback feedback--error">{error}</p> : null}
-          {success ? <p className="feedback feedback--success">{success}</p> : null}
-
-          <div className="quick-actions__buttons">
-            {editing ? (
-              <>
-                <button className="button" type="submit" disabled={loading}>
-                  {loading ? "Saving..." : "Save Changes"}
+              <div className="profile-actions">
+                <button className="button" type="submit" disabled={avatarLoading}>
+                  {avatarLoading ? "Uploading..." : "Upload Photo"}
                 </button>
                 <button
                   className="button button--secondary"
                   type="button"
-                  disabled={loading}
-                  onClick={handleCancel}
+                  disabled={avatarLoading}
+                  onClick={() => {
+                    setSelectedAvatarFile(null);
+                    setAvatarError("");
+                    setAvatarSuccess("");
+                  }}
                 >
-                  Cancel
+                  Clear
                 </button>
-              </>
-            ) : (
-              <button className="button" type="button" onClick={handleLogout}>
-                Logout
-              </button>
-            )}
+              </div>
+            </form>
           </div>
-        </form>
-      </section>
+        </section>
 
-      <section className="card card--form profile-editor profile-editor--avatar">
-        <div className="section-title-with-action">
-          <h2>Profile Photo</h2>
-        </div>
-
-        <div className="profile-avatar-block">
-          <div className="profile-avatar-preview" aria-hidden="true">
-            {getAvatarUrl(currentUser) && !avatarLoadFailed ? (
-              <img
-                src={getAvatarUrl(currentUser)}
-                alt="Profile"
-                onLoad={() => {
-                  logAvatarDebug("final img src", getAvatarUrl(currentUser));
-                }}
-                onError={(event) => {
-                  setAvatarLoadFailed(true);
-                  logAvatarDebug("image load failed for src", event.currentTarget.currentSrc || getAvatarUrl(currentUser));
-                }}
-              />
-            ) : (
-              <span>{getNameInitial(currentUser?.name)}</span>
-            )}
-          </div>
-
-          <form className="profile-avatar-form" onSubmit={handleAvatarUpload}>
-            <label htmlFor="avatarFile">Choose a photo</label>
-            <input
-              id="avatarFile"
-              name="avatarFile"
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarFileChange}
-              disabled={avatarLoading}
-            />
-
-            {avatarError ? <p className="feedback feedback--error">{avatarError}</p> : null}
-            {avatarSuccess ? <p className="feedback feedback--success">{avatarSuccess}</p> : null}
-
-            <div className="quick-actions__buttons">
-              <button className="button" type="submit" disabled={avatarLoading}>
-                {avatarLoading ? "Uploading..." : "Upload Photo"}
-              </button>
+        <section className="card card--form profile-editor profile-card profile-card--info">
+          <div className="section-title-with-action">
+            <h2 className="profile-card__title">Account Information</h2>
+            {!editing ? (
               <button
                 className="button button--secondary"
                 type="button"
-                disabled={avatarLoading}
                 onClick={() => {
-                  setSelectedAvatarFile(null);
-                  setAvatarError("");
-                  setAvatarSuccess("");
+                  setEditing(true);
+                  setError("");
+                  setSuccess("");
                 }}
               >
-                Clear
+                Edit Profile
               </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <section className="card card--form profile-editor profile-editor--password">
-        <div className="section-title-with-action">
-          <h2>Security</h2>
-        </div>
-
-        <form className="stack-form" onSubmit={handlePasswordSave}>
-          <div className="profile-meta-grid">
-            <div className="profile-meta-card">
-              <p className="profile-meta-label">Password</p>
-              <p className="profile-meta-value">Protected</p>
-            </div>
-            <div className="profile-meta-card">
-              <p className="profile-meta-label">Requirement</p>
-              <p className="profile-meta-value">8+ chars with letters and numbers</p>
-            </div>
+            ) : null}
           </div>
 
-          <div className="password-grid">
-            <div>
-              <label htmlFor="currentPassword">Current Password</label>
+          <form className="stack-form profile-form" onSubmit={handleSave}>
+            <div className="profile-meta-grid">
+              <div className="profile-meta-card">
+                <p className="profile-meta-label">User ID</p>
+                <p className="profile-meta-value">{currentUser?.id || "Not available"}</p>
+              </div>
+              <div className="profile-meta-card">
+                <p className="profile-meta-label">Status</p>
+                <p className="profile-meta-value">{editing ? "Editing" : "Stable"}</p>
+              </div>
+            </div>
+
+            <div className="profile-field">
+              <label htmlFor="name">Name</label>
               <input
-                id="currentPassword"
-                name="currentPassword"
-                type="password"
-                value={passwordData.currentPassword}
-                onChange={handlePasswordChange}
-                disabled={passwordLoading}
-                autoComplete="current-password"
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleChange}
+                disabled={!editing || loading}
                 required
               />
             </div>
 
-            <div>
-              <label htmlFor="newPassword">New Password</label>
+            <div className="profile-field">
+              <label htmlFor="email">Email</label>
               <input
-                id="newPassword"
-                name="newPassword"
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                disabled={!editing || loading}
+                required
+              />
+            </div>
+
+            {error ? <p className="feedback feedback--error">{error}</p> : null}
+            {success ? <p className="feedback feedback--success">{success}</p> : null}
+
+            <div className="profile-actions">
+              {editing ? (
+                <>
+                  <button className="button" type="submit" disabled={loading}>
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+                  <button
+                    className="button button--secondary"
+                    type="button"
+                    disabled={loading}
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <button className="button" type="button" onClick={handleLogout}>
+                  Logout
+                </button>
+              )}
+            </div>
+          </form>
+        </section>
+
+        <section className="card card--form profile-editor profile-card profile-card--password">
+          <div className="section-title-with-action">
+            <h2 className="profile-card__title">Security</h2>
+          </div>
+
+          <form className="stack-form profile-form" onSubmit={handlePasswordSave}>
+            <div className="profile-meta-grid">
+              <div className="profile-meta-card">
+                <p className="profile-meta-label">Password</p>
+                <p className="profile-meta-value">Protected</p>
+              </div>
+              <div className="profile-meta-card">
+                <p className="profile-meta-label">Requirement</p>
+                <p className="profile-meta-value">8+ chars with letters and numbers</p>
+              </div>
+            </div>
+
+            <div className="password-grid">
+              <div className="profile-field">
+                <label htmlFor="currentPassword">Current Password</label>
+                <input
+                  id="currentPassword"
+                  name="currentPassword"
+                  type="password"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChange}
+                  disabled={passwordLoading}
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+
+              <div className="profile-field">
+                <label htmlFor="newPassword">New Password</label>
+                <input
+                  id="newPassword"
+                  name="newPassword"
+                  type="password"
+                  minLength={8}
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  disabled={passwordLoading}
+                  autoComplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="profile-field">
+              <label htmlFor="confirmPassword">Confirm New Password</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
                 minLength={8}
-                value={passwordData.newPassword}
+                value={passwordData.confirmPassword}
                 onChange={handlePasswordChange}
                 disabled={passwordLoading}
                 autoComplete="new-password"
                 required
               />
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="confirmPassword">Confirm New Password</label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              minLength={8}
-              value={passwordData.confirmPassword}
-              onChange={handlePasswordChange}
-              disabled={passwordLoading}
-              autoComplete="new-password"
-              required
-            />
-          </div>
+            {passwordError ? <p className="feedback feedback--error">{passwordError}</p> : null}
+            {passwordSuccess ? <p className="feedback feedback--success">{passwordSuccess}</p> : null}
 
-          {passwordError ? <p className="feedback feedback--error">{passwordError}</p> : null}
-          {passwordSuccess ? <p className="feedback feedback--success">{passwordSuccess}</p> : null}
-
-          <div className="quick-actions__buttons">
-            <button className="button" type="submit" disabled={passwordLoading}>
-              {passwordLoading ? "Updating..." : "Change Password"}
-            </button>
-            <button
-              className="button button--secondary"
-              type="button"
-              disabled={passwordLoading}
-              onClick={() => {
-                resetPasswordForm();
-                setPasswordError("");
-                setPasswordSuccess("");
-              }}
-            >
-              Clear
-            </button>
-          </div>
-        </form>
-      </section>
+            <div className="profile-actions">
+              <button className="button" type="submit" disabled={passwordLoading}>
+                {passwordLoading ? "Updating..." : "Change Password"}
+              </button>
+              <button
+                className="button button--secondary"
+                type="button"
+                disabled={passwordLoading}
+                onClick={() => {
+                  resetPasswordForm();
+                  setPasswordError("");
+                  setPasswordSuccess("");
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
     </div>
   );
 }

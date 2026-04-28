@@ -47,42 +47,54 @@ function GroupsPage() {
         <p className="hero-card__text">Create groups for trips, homes, teams, or any shared spending setup.</p>
       </section>
 
-      <section className="card card--form">
-        <h2>Create New Group</h2>
-        <form className="inline-form" onSubmit={handleCreateGroup}>
-          <input
-            type="text"
-            placeholder="Enter group name"
-            value={newGroupName}
-            onChange={(event) => setNewGroupName(event.target.value)}
-            required
-          />
-          <button type="submit" className="button">
-            Create Group
-          </button>
-        </form>
-      </section>
+      <div className="groups-page-grid">
+        <section className="card card--form groups-card groups-card--create">
+          <div className="section-title-with-action">
+            <h2 className="groups-card__title">Create New Group</h2>
+          </div>
+          <form className="stack-form groups-form" onSubmit={handleCreateGroup}>
+            <div className="groups-field">
+              <label htmlFor="groupName">Group Name</label>
+              <input
+                id="groupName"
+                type="text"
+                placeholder="Enter group name"
+                value={newGroupName}
+                onChange={(event) => setNewGroupName(event.target.value)}
+                required
+              />
+            </div>
+            <div className="groups-actions">
+              <button type="submit" className="button">
+                Create Group
+              </button>
+            </div>
+          </form>
+        </section>
 
-      <section className="card">
-        <h2>All Groups</h2>
-        {error ? <p className="feedback feedback--error">{error}</p> : null}
-        {loading ? <p>Loading groups...</p> : null}
-        {!loading && groups.length === 0 ? <p>No groups available.</p> : null}
+        <section className="card groups-card groups-card--list">
+          <div className="section-title-with-action">
+            <h2 className="groups-card__title">All Groups</h2>
+          </div>
+          {error ? <p className="feedback feedback--error">{error}</p> : null}
+          {loading ? <p className="status-text">Loading groups...</p> : null}
+          {!loading && groups.length === 0 ? <p className="status-text">No groups available.</p> : null}
 
-        <ul className="list list--dense">
-          {groups.map((group) => (
-            <li key={group.id} className="list__item">
-              <div>
-                <strong>{group.name}</strong>
-                <p className="muted">{group.members?.length ?? 0} members in this group</p>
-              </div>
-              <Link className="button button--secondary" to={`/groups/${group.id}`}>
-                View Details
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+          <ul className="list list--dense">
+            {groups.map((group) => (
+              <li key={group.id} className="list__item">
+                <div>
+                  <strong>{group.name}</strong>
+                  <p className="muted">{group.members?.length ?? 0} members in this group</p>
+                </div>
+                <Link className="button button--secondary" to={`/groups/${group.id}`}>
+                  View Details
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }
