@@ -451,6 +451,19 @@ body {
 
   .topbar {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar h1 {
+    font-size: 28px;
+    letter-spacing: normal;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .expense-header {
@@ -458,6 +471,40 @@ body {
   }
 
   .expense-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .dashboard-content {
+    padding: 14px;
+  }
+
+  .topbar h1 {
+    font-size: 24px;
+  }
+
+  .summary-cards,
+  .dashboard-panels,
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-grid button,
+  .ghost-btn,
+  .solid-btn,
+  .mini-btn {
+    width: 100%;
+  }
+
+  .back-btn,
+  .ghost-btn,
+  .solid-btn {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+
+  .dashboard-layout {
     grid-template-columns: 1fr;
   }
 }

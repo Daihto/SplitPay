@@ -1,7 +1,17 @@
 import axios from "axios";
 
+const defaultBaseURL = "http://192.168.0.159:8080";
+const emulatorBaseURL = "http://10.0.2.2:8080";
+let baseURL = defaultBaseURL;
+
+if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
+  baseURL = emulatorBaseURL;
+} else if (typeof window !== "undefined" && window.location.hostname === "10.0.2.2") {
+  baseURL = emulatorBaseURL;
+}
+
 const api = axios.create({
-  baseURL: "http://localhost:8080"
+  baseURL
 });
 
 export function getApiErrorMessage(error, fallbackMessage = "Request failed.") {
@@ -12,7 +22,7 @@ export function getApiErrorMessage(error, fallbackMessage = "Request failed.") {
 
   // When backend is down or blocked, axios has no response object.
   if (error?.request && !error?.response) {
-    return "Cannot connect to backend at http://localhost:8080. Please start your Spring Boot server and try again.";
+    return `Cannot connect to backend at ${baseURL}. Please start your Spring Boot server and try again.`;
   }
 
   return fallbackMessage;

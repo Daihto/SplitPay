@@ -55,6 +55,8 @@ body,
   margin: 0;
   padding: 0;
   font-family: "Plus Jakarta Sans", "Manrope", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* ------------------------------
@@ -117,6 +119,58 @@ body,
   height: calc(100vh - 2rem);
   position: sticky;
   top: 1rem;
+}
+
+@media (max-width: 1080px) {
+  .app-shell--authed {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .app-shell--authed .navbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    padding: 1rem 0.95rem;
+  }
+
+  .app-shell--authed .navbar__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 0.3rem;
+  }
+
+  .app-shell--authed .navbar__links a {
+    white-space: nowrap;
+    font-size: 0.9rem;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .app-shell--authed .page-container--authed {
+    padding: 0.9rem;
+  }
+
+  .app-shell--authed .dashboard-hero,
+  .app-shell--authed .dashboard-columns,
+  .app-shell--authed .dashboard-balance-ribbon,
+  .app-shell--authed .dashboard-spotlight,
+  .app-shell--authed .dashboard-hero__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .app-shell--authed .topbar h1,
+  .app-shell--authed .hero-card h1,
+  .app-shell--authed .dashboard-card__head h2 {
+    letter-spacing: normal;
+  }
 }
 
 .app-shell--authed .navbar__brand-wrap {
