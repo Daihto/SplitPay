@@ -32,18 +32,25 @@ function LoginPage() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log("🔑 [LoginPage] Form submitted with email:", formData.email);
     setError("");
     setLoading(true);
 
     try {
+      console.log("🔑 [LoginPage] Calling loginUser...");
       const result = await loginUser(formData);
+      console.log("🔑 [LoginPage] loginUser returned:", result);
+      
       const normalizedUser = normalizeLoginResult(result, formData.email);
+      console.log("🔑 [LoginPage] Normalized user:", normalizedUser);
 
       if (!normalizedUser.token) {
+        console.error("🔑 [LoginPage] No token in response!");
         setError("Login succeeded but no auth token was returned. Please contact backend support.");
         return;
       }
 
+      console.log("🔑 [LoginPage] Saving user to localStorage and navigating...");
       localStorage.setItem(
         "splitpayUser",
         JSON.stringify(normalizedUser)
@@ -51,7 +58,10 @@ function LoginPage() {
 
       navigate("/dashboard");
     } catch (apiError) {
-      setError(getApiErrorMessage(apiError, "Login failed."));
+      console.error("🔑 [LoginPage] Caught error:", apiError);
+      const errorMessage = getApiErrorMessage(apiError, "Login failed.");
+      console.error("🔑 [LoginPage] Error message:", errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

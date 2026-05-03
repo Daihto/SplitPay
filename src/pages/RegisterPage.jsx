@@ -34,6 +34,7 @@ function RegisterPage() {
     }
 
     setLoading(true);
+    console.log("📝 [RegisterPage] Form submitted with email:", formData.email);
 
     try {
       const payload = {
@@ -42,11 +43,17 @@ function RegisterPage() {
         password: formData.password
       };
 
+      console.log("📝 [RegisterPage] Calling registerUser...");
       await registerUser(payload);
+      console.log("📝 [RegisterPage] Registration successful!");
+      
       setSuccess("Registration successful. Redirecting to login...");
       setTimeout(() => navigate("/login"), 1000);
     } catch (apiError) {
-      setError(getApiErrorMessage(apiError, "Registration failed."));
+      console.error("📝 [RegisterPage] Caught error:", apiError);
+      const errorMessage = getApiErrorMessage(apiError, "Registration failed.");
+      console.error("📝 [RegisterPage] Error message:", errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
