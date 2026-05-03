@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const defaultBaseURL = "http://192.168.0.159:8080";
+const defaultBaseURL = import.meta.env.VITE_API_URL || "http://192.168.0.159:8080";
 const emulatorBaseURL = "http://10.0.2.2:8080";
 let baseURL = defaultBaseURL;
 
@@ -22,7 +22,7 @@ export function getApiErrorMessage(error, fallbackMessage = "Request failed.") {
 
   // When backend is down or blocked, axios has no response object.
   if (error?.request && !error?.response) {
-    return `Cannot connect to backend at ${baseURL}. Please start your Spring Boot server and try again.`;
+    return `Cannot connect to backend at ${baseURL}. Please check your backend service and try again.`;
   }
 
   return fallbackMessage;
