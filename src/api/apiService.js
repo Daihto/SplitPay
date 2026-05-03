@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const defaultBaseURL = import.meta.env.VITE_API_URL || "http://192.168.0.159:8080";
-const emulatorBaseURL = "http://10.0.2.2:8080";
+// Production backend URL - defaults to Render backend
+const defaultBaseURL = import.meta.env.VITE_API_URL || "https://splitpaybackend.onrender.com";
+const emulatorBaseURL = "http://10.0.2.2:8080"; // Local Android emulator
 let baseURL = defaultBaseURL;
 
+// Use emulator backend for Android development
 if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
   baseURL = emulatorBaseURL;
 } else if (typeof window !== "undefined" && window.location.hostname === "10.0.2.2") {
