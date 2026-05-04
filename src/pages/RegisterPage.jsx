@@ -111,14 +111,14 @@ function RegisterPage() {
           </div>
 
           <div className="auth-fullscreen__field">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Username</label>
             <div className="auth-fullscreen__input-wrap">
               <span className="auth-fullscreen__field-icon" aria-hidden="true">U</span>
               <input
                 id="name"
                 name="name"
                 type="text"
-                placeholder="Enter your full name"
+                placeholder="Enter A Username"
                 value={formData.name}
                 onChange={handleChange}
                 required
