@@ -6,7 +6,7 @@ body {
   margin: 0;
   font-family: "Inter", "Segoe UI", sans-serif;
   background: #f3f5f9;
-  color: #0f172a;
+  color: #edf2ff;
 }
 
 .dashboard-layout {
@@ -77,7 +77,7 @@ body {
   border-radius: 50%;
   font-size: 12px;
   font-weight: 700;
-  color: #0f172a;
+  color: #edf2ff;
   cursor: help;
   line-height: 1;
   border: 1px solid rgba(15, 23, 42, 0.2);
@@ -97,7 +97,7 @@ body {
   gap: 8px;
   border: 1px solid rgba(15, 23, 42, 0.15);
   background: rgba(255, 255, 255, 0.75);
-  color: #0f172a;
+  color: #edf2ff;
   font-weight: 700;
   padding: 10px 16px;
   border-radius: 14px;
@@ -154,7 +154,7 @@ body {
 .ghost-btn {
   border: 1px solid #dbe3ee;
   background: #fff;
-  color: #0f172a;
+  color: #edf2ff;
   border-radius: 14px;
   padding: 12px 16px;
   font-weight: 700;
@@ -366,7 +366,7 @@ body {
 .quick-grid button {
   border: 1px solid #dbe3ee;
   background: #f8fafc;
-  color: #0f172a;
+  color: #edf2ff;
   border-radius: 16px;
   padding: 16px 14px;
   font-weight: 700;
