@@ -1,0 +1,242 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.register-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  background: #0f172a;
+}
+
+.register-left {
+  position: relative;
+  overflow: hidden;
+  padding: 34px 42px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    linear-gradient(135deg, rgba(3, 105, 161, 0.55), rgba(13, 148, 136, 0.45)),
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80")
+      center/cover no-repeat;
+}
+
+.register-left-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.56),
+    rgba(15, 23, 42, 0.18)
+  );
+}
+
+.register-brand,
+.register-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.register-brand {
+  font-size: 80px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.register-copy {
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.register-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.register-copy h1 {
+  margin: 0;
+  font-size: 46px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.register-description {
+  margin-top: 18px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.register-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.register-pills span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  font-size: 13px;
+}
+
+.register-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px;
+  background:
+    radial-gradient(circle at top right, rgba(13, 148, 136, 0.12), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.12), transparent 28%),
+    #0f172a;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 34px 30px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  color: #fff;
+}
+
+.register-header h2 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: -0.03em;
+}
+
+.register-header p {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 14px;
+}
+
+.register-form {
+  margin-top: 28px;
+}
+
+.register-field {
+  margin-bottom: 16px;
+}
+
+.register-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.register-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 15px;
+}
+
+.register-field input::placeholder {
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.register-field input:focus {
+  outline: none;
+  border-bottom-color: #67e8f9;
+  box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.12);
+}
+
+.register-main-btn {
+  width: 100%;
+  margin-top: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 18px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: 0.2s ease;
+}
+
+.register-main-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.16);
+}
+
+.register-error-box {
+  margin-top: 4px;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #fecaca;
+  font-size: 14px;
+}
+
+.register-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.register-footer a {
+  color: #67e8f9;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+  .register-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .register-left {
+    min-height: 320px;
+  }
+
+  .register-copy h1 {
+    font-size: 34px;
+  }
+
+  .register-right {
+    margin-top: -36px;
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+  }
+}

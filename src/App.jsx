@@ -1,15 +1,15 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AddExpensePage from "./pages/AddExpensePage";
-import ActivityPage from "./pages/ActivityPage";
-import BalancesPage from "./pages/BalancesPage";
-import DashboardPage from "./pages/DashboardPage";
-import GroupDetailsPage from "./pages/GroupDetailsPage";
-import GroupsPage from "./pages/GroupsPage";
-import LoginPage from "./pages/LoginPage";
-import ProfilePage from "./pages/ProfilePage";
-import RegisterPage from "./pages/RegisterPage";
+import Navbar from "./features/shared/components/Navbar";
+import ProtectedRoute from "./features/shared/components/ProtectedRoute";
+import AddExpensePage from "./features/expenses/pages/AddExpensePage";
+import ActivityPage from "./features/expenses/pages/ActivityPage";
+import BalancesPage from "./features/balances/pages/BalancesPage";
+import DashboardPage from "./features/dashboard/pages/DashboardPage";
+import GroupDetailsPage from "./features/groups/pages/GroupDetailsPage";
+import GroupsPage from "./features/groups/pages/GroupsPage";
+import LoginPage from "./features/auth/pages/LoginPage";
+import ProfilePage from "./features/profile/pages/ProfilePage";
+import RegisterPage from "./features/auth/pages/RegisterPage";
 
 function App() {
   const location = useLocation();
