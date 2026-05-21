@@ -121,7 +121,7 @@ function normalizeText(value) {
 
 function buildMemberLookup(members = []) {
   return (Array.isArray(members) ? members : []).reduce((lookup, member) => {
-    const id = normalizeId(member?.id ?? member);
+    const id = normalizeId(member?.id ?? member?.user_id ?? member?.userId ?? member);
     if (!id) {
       return lookup;
     }
@@ -129,6 +129,68 @@ function buildMemberLookup(members = []) {
     lookup[id] = normalizeText(member?.name ?? member?.username ?? member?.email ?? member);
     return lookup;
   }, {});
+}
+
+function aggregateBalanceItems(balanceItems = []) {
+  const sums = {};
+
+  (Array.isArray(balanceItems) ? balanceItems : []).forEach((item) => {
+    const from = normalizeId(item.fromUserId);
+    const to = normalizeId(item.toUserId);
+    if (!from || !to || Number(item.amount || 0) <= 0) {
+      return;
+    }
+
+    const key = `${from}->${to}`;
+    if (!sums[key]) {
+      sums[key] = {
+        ...item,
+        amount: 0
+      };
+    }
+
+    sums[key].amount += Number(item.amount || 0);
+  });
+
+  const result = [];
+  const seen = new Set();
+
+  Object.entries(sums).forEach(([key, item]) => {
+    if (seen.has(key)) {
+      return;
+    }
+
+    const [from, to] = key.split("->");
+    const reverseKey = `${to}->${from}`;
+    const reverse = sums[reverseKey];
+
+    if (reverse) {
+      const netAmount = Number((item.amount || 0) - (reverse.amount || 0));
+      if (Math.abs(netAmount) > 0.001) {
+        if (netAmount > 0) {
+          result.push({
+            ...item,
+            amount: Number(netAmount.toFixed(2))
+          });
+        } else {
+          result.push({
+            ...reverse,
+            amount: Number(Math.abs(netAmount).toFixed(2))
+          });
+        }
+      }
+      seen.add(key);
+      seen.add(reverseKey);
+    } else {
+      result.push({
+        ...item,
+        amount: Number((item.amount || 0).toFixed(2))
+      });
+      seen.add(key);
+    }
+  });
+
+  return result.filter((item) => Number(item.amount || 0) > 0);
 }
 
 function extractExpensePaymentInfo(expense) {
@@ -188,9 +250,11 @@ function buildBalanceItemsFromExpense(expense, memberLookup = {}, groupName = ""
 
 function calculateGroupBalancesFromExpenses(expenses = [], group = {}) {
   const memberLookup = buildMemberLookup(group.members);
-  return (Array.isArray(expenses) ? expenses : []).flatMap((expense) =>
+  const balanceItems = (Array.isArray(expenses) ? expenses : []).flatMap((expense) =>
     buildBalanceItemsFromExpense(expense, memberLookup, group.name)
   );
+
+  return aggregateBalanceItems(balanceItems);
 }
 
 function calculateUserBalancesFromGroups(groups = [], groupExpensesByGroupId = {}, currentUserId) {
