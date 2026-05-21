@@ -3224,3 +3224,23 @@ body,
   font-weight: 700;
   color: #eef4ff;
 }
+
+.app-shell--authed .balances-card {
+  color: #ffffff;
+}
+
+.app-shell--authed .balances-card .summary-card__value {
+  color: #ffffff;
+}
+
+.app-shell--authed .balances-card .summary-card__title,
+.app-shell--authed .balances-card .balances-card__title,
+.app-shell--authed .balances-card--list .list__item strong,
+.app-shell--authed .balances-card--list .list__item span {
+  color: #ffffff;
+}
+
+.app-shell--authed .balances-card--list .list__item {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.14);
+}
