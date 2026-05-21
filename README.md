@@ -28,7 +28,35 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Mobile / Android Studio Setup
 
+This app uses Vite environment variables for backend configuration.
+
+1. Copy `.env.example` to `.env` or `.env.local` in the `SplitPay` folder.
+2. Set the backend URL for your environment:
+   - `VITE_API_URL=https://splitpaybackend.onrender.com` for production.
+   - `VITE_API_URL=http://<your-host-ip>:8080` for a real Android device.
+   - `VITE_ANDROID_EMULATOR_URL=http://10.0.2.2:8080` for Android Studio emulator.
+
+### Android emulator
+
+If you run the app in the Android emulator, the default emulator host is `10.0.2.2`.
+The app will use `VITE_ANDROID_EMULATOR_URL` when it detects Android.
+
+### Real Android device
+
+If you test on a physical Android device, use your machine's LAN IP instead of `localhost`:
+
+```env
+VITE_API_URL=http://192.168.1.100:8080
+```
+
+Then run the mobile web app via `npm run dev` and open the local URL from your device browser.
+
+### Notes
+
+- Make sure your backend is reachable from the emulator or device.
+- Use the proper IP address for your development machine.
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**

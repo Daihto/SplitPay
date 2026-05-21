@@ -1,16 +1,22 @@
 import axios from "axios";
 
-// Production backend URL - defaults to Render backend
-const defaultBaseURL = import.meta.env.VITE_API_URL || "https://splitpaybackend.onrender.com";
-const emulatorBaseURL = "http://10.0.2.2:8080"; // Local Android emulator
-let baseURL = defaultBaseURL;
+const envApiURL = import.meta.env.VITE_API_URL;
+const emulatorBaseURL = import.meta.env.VITE_ANDROID_EMULATOR_URL || "http://10.0.2.2:8080"; // Local Android emulator
 
-// Use emulator backend for Android development
-if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
-  baseURL = emulatorBaseURL;
-} else if (typeof window !== "undefined" && window.location.hostname === "10.0.2.2") {
-  baseURL = emulatorBaseURL;
-}
+const baseURL = (() => {
+  const isAndroid = typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent);
+  const isEmulatorHost = typeof window !== "undefined" && window.location.hostname === "10.0.2.2";
+
+  if (isAndroid) {
+    return envApiURL || emulatorBaseURL;
+  }
+
+  if (isEmulatorHost) {
+    return emulatorBaseURL;
+  }
+
+  return envApiURL || "https://splitpaybackend.onrender.com";
+})();
 
 const api = axios.create({
   baseURL
