@@ -6,6 +6,7 @@ import {
   getGroupById,
   getGroupExpenses
 } from "../../../api/apiService";
+import { calculateGroupBalancesFromExpenses } from "../../../utils/settlementUtils";
 
 function GroupDetailsPage() {
   const { groupId } = useParams();
@@ -19,15 +20,36 @@ function GroupDetailsPage() {
   async function loadData() {
     try {
       setLoading(true);
-      const [groupData, expensesData, balancesData] = await Promise.all([
-        getGroupById(groupId),
-        getGroupExpenses(groupId),
-        getGroupBalances(groupId)
-      ]);
+      let groupData = null;
+      let expensesData = [];
+      let balancesData = [];
+
+      try {
+        const [groupResult, expensesResult, balancesResult] = await Promise.all([
+          getGroupById(groupId),
+          getGroupExpenses(groupId),
+          getGroupBalances(groupId)
+        ]);
+
+        groupData = groupResult;
+        expensesData = Array.isArray(expensesResult) ? expensesResult : [];
+        balancesData = Array.isArray(balancesResult) ? balancesResult : [];
+      } catch (apiError) {
+        const groupResult = await getGroupById(groupId);
+        const expensesResult = await getGroupExpenses(groupId);
+        groupData = groupResult;
+        expensesData = Array.isArray(expensesResult) ? expensesResult : [];
+        balancesData = [];
+        console.warn("Group balances API unavailable, using expense fallback.", apiError);
+      }
 
       setGroup(groupData);
-      setExpenses(Array.isArray(expensesData) ? expensesData : []);
-      setBalances(Array.isArray(balancesData) ? balancesData : []);
+      setExpenses(expensesData);
+      setBalances(
+        balancesData.length > 0
+          ? balancesData
+          : calculateGroupBalancesFromExpenses(expensesData, groupData || {})
+      );
     } catch (apiError) {
       setError(apiError.response?.data?.message ?? "Could not load group details.");
     } finally {

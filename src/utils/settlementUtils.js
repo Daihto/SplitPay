@@ -103,4 +103,115 @@ function markBalanceSettled(userId, balanceItem) {
   saveSettledMap(userId, settledMap);
 }
 
-export { applySettledStatus, buildBalanceKey, getBalancePerspective, getSettledMap, markBalanceSettled };
+function normalizeId(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value).trim();
+}
+
+function normalizeText(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value).trim();
+}
+
+function buildMemberLookup(members = []) {
+  return (Array.isArray(members) ? members : []).reduce((lookup, member) => {
+    const id = normalizeId(member?.id ?? member);
+    if (!id) {
+      return lookup;
+    }
+
+    lookup[id] = normalizeText(member?.name ?? member?.username ?? member?.email ?? member);
+    return lookup;
+  }, {});
+}
+
+function extractExpensePaymentInfo(expense) {
+  const paidByUserId = normalizeId(
+    expense?.paidByUserId ?? expense?.paidBy ?? expense?.paid_by ?? expense?.payerId ?? expense?.payer_id
+  );
+
+  const splitAmong = Array.isArray(expense?.splitAmong)
+    ? expense.splitAmong
+    : Array.isArray(expense?.participantIds)
+    ? expense.participantIds
+    : Array.isArray(expense?.split_among)
+    ? expense.split_among
+    : [];
+
+  const participantIds = splitAmong
+    .map(normalizeId)
+    .filter((id) => id && id !== "null" && id !== "undefined");
+
+  const amount = Number(expense?.amount ?? 0);
+  const settled = Boolean(
+    expense?.settled === true ||
+      expense?.status === "SETTLED" ||
+      expense?.isSettled === true ||
+      expense?.is_settled === true
+  );
+
+  return {
+    paidByUserId,
+    participantIds,
+    amount,
+    settled
+  };
+}
+
+function buildBalanceItemsFromExpense(expense, memberLookup = {}, groupName = "") {
+  const { paidByUserId, participantIds, amount, settled } = extractExpensePaymentInfo(expense);
+  if (!paidByUserId || participantIds.length === 0 || amount <= 0) {
+    return [];
+  }
+
+  const share = amount / participantIds.length;
+  return participantIds
+    .filter((participantId) => participantId !== paidByUserId)
+    .map((participantId) => ({
+      id: `${normalizeId(expense?.id) || Math.random().toString(36).slice(2, 10)}-${participantId}-${paidByUserId}`,
+      fromUserId: participantId,
+      toUserId: paidByUserId,
+      fromUserName: memberLookup[participantId] || normalizeText(expense?.participantNames?.[participantId]) || participantId,
+      toUserName: memberLookup[paidByUserId] || normalizeText(expense?.paidByName ?? expense?.paidBy ?? expense?.paid_by ?? expense?.payerName) || paidByUserId,
+      amount: Number(share.toFixed(2)),
+      settled,
+      groupId: normalizeId(expense?.groupId ?? expense?.group_id),
+      groupName: groupName || normalizeText(expense?.groupName ?? expense?.group?.name)
+    }));
+}
+
+function calculateGroupBalancesFromExpenses(expenses = [], group = {}) {
+  const memberLookup = buildMemberLookup(group.members);
+  return (Array.isArray(expenses) ? expenses : []).flatMap((expense) =>
+    buildBalanceItemsFromExpense(expense, memberLookup, group.name)
+  );
+}
+
+function calculateUserBalancesFromGroups(groups = [], groupExpensesByGroupId = {}, currentUserId) {
+  const currentId = normalizeId(currentUserId);
+  if (!currentId) {
+    return [];
+  }
+
+  return (Array.isArray(groups) ? groups : []).flatMap((group) => {
+    const expenses = Array.isArray(groupExpensesByGroupId[group.id]) ? groupExpensesByGroupId[group.id] : [];
+    const balances = calculateGroupBalancesFromExpenses(expenses, group);
+    return balances.filter((item) => item.fromUserId === currentId || item.toUserId === currentId);
+  });
+}
+
+export {
+  applySettledStatus,
+  buildBalanceKey,
+  getBalancePerspective,
+  getSettledMap,
+  markBalanceSettled,
+  calculateGroupBalancesFromExpenses,
+  calculateUserBalancesFromGroups
+};

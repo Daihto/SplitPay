@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { getUserBalances } from "../../../api/apiService";
+import { getGroups, getGroupExpenses, getUserBalances } from "../../../api/apiService";
 import { addActivityItem } from "../../../utils/activityUtils";
-import { applySettledStatus, getBalancePerspective, markBalanceSettled } from "../../../utils/settlementUtils";
+import {
+  applySettledStatus,
+  calculateUserBalancesFromGroups,
+  getBalancePerspective,
+  markBalanceSettled
+} from "../../../utils/settlementUtils";
 
 function BalancesPage() {
   const currentUser = JSON.parse(localStorage.getItem("splitpayUser"));
@@ -18,7 +23,35 @@ function BalancesPage() {
       }
 
       try {
-        const data = await getUserBalances(currentUser.id);
+        let data = [];
+        try {
+          const apiData = await getUserBalances(currentUser.id);
+          if (Array.isArray(apiData) && apiData.length > 0) {
+            data = apiData;
+          }
+        } catch (apiError) {
+          console.warn("User balances API unavailable, falling back to expense calculation.", apiError);
+        }
+
+        if (data.length === 0) {
+          const groups = await getGroups();
+          const groupsList = Array.isArray(groups) ? groups : [];
+          const groupExpensesByGroupId = {};
+
+          await Promise.all(
+            groupsList.map(async (group) => {
+              try {
+                const groupExpenses = await getGroupExpenses(group.id);
+                groupExpensesByGroupId[group.id] = Array.isArray(groupExpenses) ? groupExpenses : [];
+              } catch {
+                groupExpensesByGroupId[group.id] = [];
+              }
+            })
+          );
+
+          data = calculateUserBalancesFromGroups(groupsList, groupExpensesByGroupId, currentUser.id);
+        }
+
         const normalizedBalances = applySettledStatus(data, currentUser.id);
         setBalances(normalizedBalances);
       } catch (apiError) {

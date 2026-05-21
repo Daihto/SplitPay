@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { getApiErrorMessage, getGroupExpenses, getGroups, getUserBalances } from "../../../api/apiService";
-import { applySettledStatus, getBalancePerspective } from "../../../utils/settlementUtils";
+import {
+  applySettledStatus,
+  calculateUserBalancesFromGroups,
+  getBalancePerspective
+} from "../../../utils/settlementUtils";
 
 function formatCurrency(value) {
   return `$${Number(value || 0).toFixed(2)}`;
@@ -64,11 +68,35 @@ function DashboardPage() {
         const groupsList = Array.isArray(groupsData) ? groupsData : [];
         setGroups(groupsList);
 
+        let balancesData = [];
         if (currentUser?.id) {
-          const userBalances = await getUserBalances(currentUser.id);
-          const normalizedBalances = applySettledStatus(userBalances, currentUser.id);
-          setBalances(normalizedBalances);
+          try {
+            const userBalances = await getUserBalances(currentUser.id);
+            if (Array.isArray(userBalances) && userBalances.length > 0) {
+              balancesData = userBalances;
+            }
+          } catch (apiError) {
+            console.warn("Dashboard user balances API unavailable, using expense fallback.", apiError);
+          }
         }
+
+        if (balancesData.length === 0 && currentUser?.id) {
+          const groupExpensesByGroupId = {};
+          await Promise.all(
+            groupsList.map(async (group) => {
+              try {
+                const groupExpenses = await getGroupExpenses(group.id);
+                groupExpensesByGroupId[group.id] = Array.isArray(groupExpenses) ? groupExpenses : [];
+              } catch {
+                groupExpensesByGroupId[group.id] = [];
+              }
+            })
+          );
+          balancesData = calculateUserBalancesFromGroups(groupsList, groupExpensesByGroupId, currentUser.id);
+        }
+
+        const normalizedBalances = applySettledStatus(balancesData, currentUser?.id);
+        setBalances(normalizedBalances);
 
         const expensesByGroup = await Promise.allSettled(
           groupsList.map(async (group) => {
